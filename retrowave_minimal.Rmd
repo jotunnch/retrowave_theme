@@ -1,0 +1,72 @@
+---
+title: "minimal theme"
+author: "CHRIS"
+date: "8/2/2019"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(extrafont)
+font_import()
+```
+
+I'm going to try modifying the minimal theme and make it retrowave style.  [Following along from this page](https://bookdown.org/rdpeng/RProgDA/building-a-new-theme.html)
+
+First step is to take an existing them and modify it.  I'm going to use theme minimal
+
+```{r}
+retrowave <- function() {
+  
+  
+  theme_minimal() +
+    theme(plot.background = element_rect(fill = "#1A0532"), #"#000000"), pure black doesn't give a glow
+          panel.grid = element_line(color = "#f6019d"), #"#C00179"), darker pink than text doesn't pop, the other guys always use a softer grid than the text, but i don't think that works here
+          text = element_text(color = "#f6019d"),
+          axis.text = element_text(color = "#FF71CE"),
+          axis.title = element_text(family = "DejaVuSans-Oblique"))
+}
+  
+```
+
+```{r}
+retrowave_colors <- c("#2de2e6", "#ffd319")
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point()
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  theme_minimal()
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  theme_dark()
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  retrowave() +
+  scale_color_manual(values = retrowave_colors)
+
+ggplot(data = mtcars, aes(disp, mpg)) +
+  geom_point(color = "#2de2e6") +
+  retrowave()
+```
+
+Figure out difference between replace and not replacing
+```{r}
+add_el <- theme_grey() +
+  theme(text = element_text(family = "Times"))
+
+rep_el <- theme_grey() %+replace%
+  theme(text = element_text(family = "Times"))
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  add_el
+
+ggplot(data = mtcars, aes(disp, mpg)) + 
+  geom_point() +
+  rep_el
+```
+
