@@ -8,7 +8,9 @@ output: html_document
 ```{r}
 library(tidyverse)
 library(extrafont)
-font_import()
+library(here)
+font_import(here("data"))
+
 ```
 
 I'm going to try modifying the minimal theme and make it retrowave style.  [Following along from this page](https://bookdown.org/rdpeng/RProgDA/building-a-new-theme.html)
@@ -32,6 +34,10 @@ retrowave <- function() {
 ```{r}
 retrowave_colors <- c("#2de2e6", "#ffd319")
 
+retrowave_sunset <- c("#ff901f", "#b000ff", "#ffd319", "#ff2975", "white")# leave this out, too hard to tell, could be useful for axis font colors:"#c700b5")
+
+retrowave_cool <- c("#2de2e6", "#9700cc", "#035ee8", "white", "#f6019d", "#d40078")
+
 ggplot(data = mtcars, aes(disp, mpg)) + 
   geom_point()
 
@@ -43,20 +49,31 @@ ggplot(data = mtcars, aes(disp, mpg)) +
   geom_point() +
   theme_dark()
 
-ggplot(data = mtcars, aes(disp, mpg)) + 
-  geom_point() +
+diamonds %>%
+  ggplot(aes(carat, price, col = cut)) + 
+  geom_point(alpha = 0.2) +
   retrowave() +
-  scale_color_manual(values = retrowave_colors)
+  scale_color_manual(values = retrowave_sunset)
+
+diamonds %>%
+  ggplot(aes(carat, price, col = cut)) + 
+  geom_point(alpha = 0.2) +
+  retrowave() +
+  scale_color_manual(values = retrowave_cool)
 
 ggplot(data = mtcars, aes(disp, mpg)) +
   geom_point(color = "#2de2e6") +
+  retrowave()
+
+ggplot(data = mtcars, aes(disp, mpg)) +
+  geom_point(color = "white") +
   retrowave()
 ```
 
 Figure out difference between replace and not replacing
 ```{r}
 add_el <- theme_grey() +
-  theme(text = element_text(family = "Times"))
+  theme(text = element_text(family = "Optima"))
 
 rep_el <- theme_grey() %+replace%
   theme(text = element_text(family = "Times"))
@@ -66,7 +83,7 @@ ggplot(data = mtcars, aes(disp, mpg)) +
   add_el
 
 ggplot(data = mtcars, aes(disp, mpg)) + 
-  geom_point() +
-  rep_el
+  geom_point()# +
+#  rep_el
 ```
 
